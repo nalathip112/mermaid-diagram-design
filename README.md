@@ -25,3 +25,13 @@ Customer Service-->>API Gateway: Profile data
 API Gateway-->>Frontend: JSON response
 Frontend-->>User: Show profile
 ```
+
+sequenceDiagram
+User->Frontend: Click Profile
+Frontend->API Gateway: Request profile
+API Gateway->Customer Service: Get profile
+Customer Service->Customer DB: Query customer
+Customer DB--Customer Service: Return data
+Customer Service--API Gateway: Profile data
+API Gateway--Frontend: JSON response
+Frontend->User: Show profile page
