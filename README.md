@@ -1,13 +1,3 @@
-# Login Flow
-
-```mermaid
-sequenceDiagram
-User->>API: Login
-API->>DB: Verify user
-DB-->>API: Result
-API-->>User: Token
-```
-
 # Customer Profile Flow
 
 ```mermaid
@@ -26,4 +16,14 @@ API Gateway-->>Frontend: JSON response
 Frontend-->>User: Show profile
 ```
 
+# Verify Customer Type
+```mermaid
+sequenceDiagram
+User->>DB: Verify user
+DB-->>User: Return data
+```
 
+# Fill-in Residential Customer Details
+``` mermaid
+sequenceDiagram
+User->>Frontend: Display Residential Customer 
