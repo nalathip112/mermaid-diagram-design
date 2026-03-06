@@ -31,4 +31,8 @@ Frontend->>Baeckend API: Check Customer Type [(name)Yes=Res ,No=Non]
 Baeckend API->>DB: Query Residential Data
 DB-->>Baeckend API: Return Customer Type
 Baeckend API-->>Frontend:  Return Customer Type
+
+Frontend->>Baeckend API: GetResidentialDetails(เลขบัตร ปชช.),( Passport)
+Baeckend API->>DB: Query Residential Data
+DB-->>Baeckend API: Return Customer Details
 ```
