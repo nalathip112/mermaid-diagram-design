@@ -26,4 +26,5 @@ DB-->>User: Return data
 # Fill-in Residential Customer Details
 ``` mermaid
 sequenceDiagram
-User->>Frontend: Display Residential Customer 
+User->>Frontend: Display Residential Customer
+```
