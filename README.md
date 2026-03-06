@@ -26,5 +26,9 @@ DB-->>User: Return data
 # Fill-in Residential Customer Details
 ``` mermaid
 sequenceDiagram
-User->>Frontend: Display Residential Customer
+User->>Frontend: Input data
+Frontend->>Baeckend API: Check Customer Type [(name)Yes=Res ,No=Non]
+Baeckend API->>DB: Query Residential Data
+DB-->>Baeckend API: Return Customer Type
+Baeckend API-->>Frontend:  Return Customer Type
 ```
