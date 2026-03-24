@@ -1,3 +1,4 @@
+Fill-in Residential Customer Details
 ```mermaid
 sequenceDiagram
     autonumber
@@ -59,11 +60,6 @@ sequenceDiagram
         User->>MJ: MJ.CA.PreviewPictureListComp: Click "บันทึก" BT
         MJ-->>MJ: MJ.CA: Prepare Preview Picture list
         
-
-
-
-
-
         
         #JE->>MJ: MJ.CA: store Pictures Of Disabilities function
        # MJ->>JE: MJ.CA: response
@@ -72,6 +68,34 @@ sequenceDiagram
     MJ->>JE: MJ.CA: Customer Detail Component(customerInfo) response(End)
 ```
    
+Select Country
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User
+    participant JE as Journey Experience
+    participant MJ as Micro Journey (FE Component)
+    participant DV as Device
+    #participant BFF    
+    participant ESB
+
+User->>JE: Select New Register
+
+Note over User, ESB: Page: Customer Detail
+Note over User, ESB: MJ.CA: Document Type
+JE->>MJ: MJ.CA.DocumentTypeComp: open Document Type Component(customerInfoData)
+MJ-->>User: MJ.CA.DocumentTypeComp: Display 
+
+Note over User, ESB: MJ.CA: Customer Info
+JE->>MJ: MJ.CA.CustomerInfoComp:open Customer Info Component(customerInfoData)
+ MJ-->>User: MJ.CA.CustomerInfoComp: Display
+
+User->>JE: Click Seelect Country
+JE->>MJ: MJ.CA.CustomerInfoComp:Get Country List ()
+MJ-->>User: MJ.CA.CustomerInfoComp: Display
+
+User->>JE: Click Next BT
+JE->>MJ: MJ.CA.CustomerDetailComp: Get Customer Detail Data
 
    
-    
+ ```   
