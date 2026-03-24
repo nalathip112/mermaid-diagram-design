@@ -1,4 +1,3 @@
-Fill-in Residential Customer Details
 ```mermaid
 sequenceDiagram
     autonumber
@@ -6,7 +5,7 @@ sequenceDiagram
     participant JE as Journey Experience
     participant MJ as Micro Journey (FE Component)
     participant DV as Device
-    #participant BFF    
+    participant BFF    
     participant ESB
 
    
@@ -15,19 +14,53 @@ sequenceDiagram
 
     Note over User, ESB: Page: Customer Detail
 
-    Note over User, ESB: MJ.CA: Document Type
-    JE->>MJ: MJ.CA.DocumentTypeComp: open Document Type Component(customerInfoData)
+    Note over User, ESB: MJ.CA: Initial Document Type
+    JE->>MJ: MJ.CA.DocumentTypeComp: Initial Document Type Component(customerDetailData.documentType)
     MJ-->>User: MJ.CA.DocumentTypeComp: Display 
 
-    Note over User, ESB: MJ.CA: Customer Info
-    JE->>MJ: MJ.CA.CustomerInfoComp:open Customer Info Component(customerInfoData)
+    Note over User, ESB: MJ.CA: Initial Customer Info
+    JE->>MJ: MJ.CA.CustomerInfoComp: Initial Customer Info Component(customerDetailData.customerInfo)
     MJ-->>User: MJ.CA.CustomerInfoComp: Display
+
+    User->>MJ: MJ.CA.CustomerInfoComp: Click Select Country
+    #JE->>MJ: MJ.CA.CustomerInfoComp:Get Country List ()
+    MJ->>BFF: Get Country List
+    BFF->>ESB: Get Country List
+    ESB-->>BFF: Country List Data
+    BFF-->>MJ: Country List Data
+    MJ-->>User: MJ.CA.CountryListComp: Display 
+    User->>MJ: MJ.CA.CountryListComp: Click Select Country
+
+    MJ->>MJ: MJ.CA.CountryListComp: Validate
+    alt [DocumentType = Passport AND Country = Thailand]
+        MJ-->>User: MJ.CA.CountryListComp: Display Pop-up Error
+        User->>MJ: MJ.CA.CountryListComp: Click OK BT
+        MJ-->>User: MJ.CA.CountryListComp: Display
+    else 
+        MJ-->>User: MJ.CA.CountryListComp: Close 
+    end
+
+    #MJ-->>User: MJ.CA.CountryListComp: Close 
 
     #JE-->>User: Display Customer Detail Page
 
     # Note over User, ESB: MJ.CA: Next Page
     User->>JE: Click Next BT
-    JE->>MJ: MJ.CA.CustomerDetailComp: Get Customer Detail Data
+
+    MJ->>MJ: MJ.CA.CountryListComp: Validate
+    alt [DocumentType = Passport AND Country = Thailand]
+        MJ-->>User: MJ.CA.CountryListComp: Display Pop-up Error
+        User->>MJ: MJ.CA.CountryListComp: Click OK BT
+        MJ-->>User: MJ.CA.CountryListComp: Display
+    else 
+        JE->>MJ: MJ.CA.CustomerDetailComp: Get Customer Detail Data
+    end
+
+    JE->>MJ: MJ.CA.DocumentTypeComp: Get Data
+    MJ-->>JE: MJ.CA.DocumentTypeComp: data: customerDetailData.documentType
+
+    JE->>MJ: MJ.CA.CustomerInfoComp: Get Data
+   
     
     Note over User, ESB: MJ.CA: เก็บรูปของผู้พิการ
     opt ลูกค้ามีบัตรผู้พิการ
@@ -55,47 +88,23 @@ sequenceDiagram
         User->>MJ: MJ.CA.PreviewPictureListComp: Click "ถ่ายภาพเพิ่มเติม" BT
         MJ->>DV: DV: open Camera
         DV->>MJ: DV: return Picture on Camera
-        MJ-->>User: MJ.CA.CaptionPictureComp: Display and Picture 
+        MJ-->>User: MJ.CA.CaptionPictureComp: Display and Picture on Camera 
 
         User->>MJ: MJ.CA.PreviewPictureListComp: Click "บันทึก" BT
         MJ-->>MJ: MJ.CA: Prepare Preview Picture list
         
+
+
         
         #JE->>MJ: MJ.CA: store Pictures Of Disabilities function
        # MJ->>JE: MJ.CA: response
     end
+    MJ-->>JE: MJ.CA.DocumentTypeComp: data: customerDetailData.customerInfo
+    #MJ->>JE: MJ.CA: Customer Detail Component(customerInfo) response(End)
 
-    MJ->>JE: MJ.CA: Customer Detail Component(customerInfo) response(End)
+
 ```
    
-Select Country
-```mermaid
-sequenceDiagram
-    autonumber
-    actor User
-    participant JE as Journey Experience
-    participant MJ as Micro Journey (FE Component)
-    participant DV as Device
-    #participant BFF    
-    participant ESB
-
-User->>JE: Select New Register
-
-Note over User, ESB: Page: Customer Detail
-Note over User, ESB: MJ.CA: Document Type
-JE->>MJ: MJ.CA.DocumentTypeComp: open Document Type Component(customerInfoData)
-MJ-->>User: MJ.CA.DocumentTypeComp: Display 
-
-Note over User, ESB: MJ.CA: Customer Info
-JE->>MJ: MJ.CA.CustomerInfoComp:open Customer Info Component(customerInfoData)
- MJ-->>User: MJ.CA.CustomerInfoComp: Display
-
-User->>JE: Click Seelect Country
-JE->>MJ: MJ.CA.CustomerInfoComp:Get Country List ()
-MJ-->>User: MJ.CA.CustomerInfoComp: Display
-
-User->>JE: Click Next BT
-JE->>MJ: MJ.CA.CustomerDetailComp: Get Customer Detail Data
 
    
- ```   
+    
