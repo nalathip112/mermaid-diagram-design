@@ -32,12 +32,13 @@ sequenceDiagram
     User->>MJ: MJ.CA.CountryListComp: Click Select Country
 
     MJ->>MJ: MJ.CA.CountryListComp: Validate
-    alt [DocumentType = Passport AND Country = Thailand]
-        MJ-->>User: MJ.CA.CountryListComp: Display Pop-up Error
-        User->>MJ: MJ.CA.CountryListComp: Click OK BT
-        MJ-->>User: MJ.CA.CountryListComp: Display
-    else 
+    alt [DocumentType != Thai ID Card AND Country = Thailand]
+        MJ-->>User: MJ.CA.ErrorPopupComp: Display Pop-up Error
+        User->>MJ: MJ.CA.ErrorPopupComp: Click OK BT
+        MJ-->>User: MJ.CA.ErrorPopupComp: Close
+    else  
         MJ-->>User: MJ.CA.CountryListComp: Close 
+        #JE->>MJ: MJ.CA.CustomerDetailComp: Get Customer Detail Data
     end
 
     #MJ-->>User: MJ.CA.CountryListComp: Close 
@@ -46,20 +47,23 @@ sequenceDiagram
 
     # Note over User, ESB: MJ.CA: Next Page
     User->>JE: Click Next BT
+    JE->>JE: Consume Data
+    JE-->>User: Next JE
 
-    MJ->>MJ: MJ.CA.CountryListComp: Validate
-    alt [DocumentType = Passport AND Country = Thailand]
-        MJ-->>User: MJ.CA.CountryListComp: Display Pop-up Error
-        User->>MJ: MJ.CA.CountryListComp: Click OK BT
-        MJ-->>User: MJ.CA.CountryListComp: Display
-    else 
-        JE->>MJ: MJ.CA.CustomerDetailComp: Get Customer Detail Data
-    end
 
-    JE->>MJ: MJ.CA.DocumentTypeComp: Get Data
-    MJ-->>JE: MJ.CA.DocumentTypeComp: data: customerDetailData.documentType
+    #MJ->>MJ: MJ.CA.CountryListComp: Validate
+    #alt [DocumentType = Passport AND Country = Thailand]
+        #MJ-->>User: MJ.CA.CountryListComp: Display Pop-up Error
+        #User->>MJ: MJ.CA.CountryListComp: Click OK BT
+        #MJ-->>User: MJ.CA.CountryListComp: Display
+    #else 
+        #JE->>MJ: MJ.CA.CustomerDetailComp: Get Customer Detail Data
+    #end
 
-    JE->>MJ: MJ.CA.CustomerInfoComp: Get Data
+    #JE->>MJ: MJ.CA.DocumentTypeComp: Get Data 
+    #MJ-->>JE: MJ.CA.DocumentTypeComp: data: customerDetailData.documentType
+
+    #JE->>MJ: MJ.CA.CustomerInfoComp: Get Data
    
     
     Note over User, ESB: MJ.CA: เก็บรูปของผู้พิการ
